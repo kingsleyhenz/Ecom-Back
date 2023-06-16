@@ -28,7 +28,14 @@ const productSchema = new mongoose.Schema({
     ratings:{
         type: Number,
         default: 0,
-    }
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        get: function() {
+          return this._createdAt.toLocaleDateString('en-US');
+        }
+      }
 })
 
 const Product = mongoose.model("Product", productSchema);

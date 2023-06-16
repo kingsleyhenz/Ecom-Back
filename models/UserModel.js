@@ -53,7 +53,14 @@ const userSchema = new mongoose.Schema({
       },
       lastLogin: {
         type: Date,
-      }      
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+        get: function() {
+          return this._createdAt.toLocaleDateString('en-US');
+        }
+      }
 })
 
 const UserMod = mongoose.model("User", userSchema)
