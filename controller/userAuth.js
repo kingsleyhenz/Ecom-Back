@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import otpGenerator from "otp-generator"
 import UserMod from './../models/UserModel.js';
 import { sendConfirmationEmail } from "./email.js";
+import tokenGen from './../utils/tokenGenerate.js';
 
 export const Register = async (req, res) => {
     const { name, email } = req.body;
@@ -35,8 +36,8 @@ export const Register = async (req, res) => {
 export const verifyOTP = async (req, res) => {
   const { email, otp, password } = req.body;
   try {
-    const user = await UserMod.findOne({ email });
-    if (!user) {
+    const existingUser = await UserMod.findOne({ email });
+    if (!existingUser) {
       return res.json({
         status: "error",
         message: "User not found",
@@ -50,9 +51,9 @@ export const verifyOTP = async (req, res) => {
     }
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    user.password = hashedPassword;
-    user.otp = undefined;
-    await user.save();
+    existingUser.password = hashedPassword;
+    existingUser.otp = undefined;
+    await existingUser.save();
     return res.json({
       status: "success",
       message: "Password set successfully",
@@ -66,16 +67,41 @@ export const verifyOTP = async (req, res) => {
 };
 
   
+export const completeReg = async(req,res)=>{
+   const {email, DateOfBirth, address} = req.body;
+   try {
+      const existingUser = await UserMod.findOne({email})
+      if (!existingUser) {
+        return res.json({
+          status: "error",
+          message: "User not found",
+        });
+      }
+      existingUser.DateOfBirth = DateOfBirth;
+      existingUser.address = address;
+      await existingUser.save();
+      return res.json({
+        status: "success",
+        message: "Profile updated successfully",
+        data: user,
+      });
+   } catch (error) {
+    return res.json({
+      status: "error",
+      message: error.message,
+    });
+   }
+}
 
 export const profilePic = async(req,res)=>{
   try {
     if (req.file) {
-      const user = await UserMod.findOneAndUpdate(
+      const existingUser = await UserMod.findOneAndUpdate(
         { email: req.body.email },
         { profilepicture: req.file.path },
         { new: true }
       );
-      if (!user) {
+      if (!existingUser) {
         return res.status(404).json({
            message: "User not found" });
       }
@@ -93,28 +119,34 @@ export const profilePic = async(req,res)=>{
   }
 }
 
-export const completeReg = async(req,res)=>{
-   const {email, DateOfBirth, address} = req.body;
-   try {
-      const user = await UserMod.findOne({email})
-      if (!user) {
-        return res.json({
-          status: "error",
-          message: "User not found",
-        });
-      }
-      user.DateOfBirth = DateOfBirth;
-      user.address = address;
-      await user.save();
+
+export const logIn = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const existingUser = await UserMod.findOne({ email });
+    if (!existingUser) {
       return res.json({
-        status: "success",
-        message: "Profile updated successfully",
-        data: user,
+        status: "Error",
+        message: "User not found",
       });
-   } catch (error) {
-    return res.json({
-      status: "error",
-      message: error.message,
+    }
+    const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        status: "error",
+        message: "Invalid password",
+      });
+    }
+    const token = tokenGen(existingUser);
+    res.status(200).json({
+      status: "success",
+      token,
     });
-   }
-}
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to login",
+    });
+  }
+};
