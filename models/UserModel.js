@@ -4,17 +4,35 @@ const userSchema = new mongoose.Schema({
     name:{
         type: String,
         required: true
-    } ,
+    },
     email:{
         type: String,
         required: true
     },
+    otp:{
+        type: String,
+    },
+    DateOfBirth:{
+        type: Date,
+    },
     password:{
         type: String,
-        required: true
     },
-    address:{
-        type: String,
+    address: {
+        type: {
+            country: {
+                type: String,
+                required: true
+            },
+            city: {
+                type: String,
+                required: true
+            },
+            address: {
+                type: String,
+                required: true
+            }
+        },
     },
     cart:[{
         type: mongoose.Schema.Types.ObjectId,
@@ -27,6 +45,7 @@ const userSchema = new mongoose.Schema({
     role:{
         type: String,
         enum:["Admin", "Customer","SuperAdmin"],
+        default: "Customer"
     },
     notification:[{
         type: String,
