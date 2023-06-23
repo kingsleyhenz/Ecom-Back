@@ -13,6 +13,7 @@ userRoute.post("/complete-Reg",completeReg);
 userRoute.post("/login", logIn);
 userRoute.post("/upload-profile-picture", upload.single("profilepicture"), profilePic);
 userRoute.post("/upload-to-sellCart", createProduct);
+userRoute.get("/getProducts", getAllProduct);
 
 
 export default userRoute

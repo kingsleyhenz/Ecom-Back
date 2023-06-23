@@ -24,3 +24,19 @@ export const createProduct = async(req,res) =>{
     }
 }
 
+export const getAllProduct = async(req,res)=>{
+    try {
+        const product = await Product.find({});
+        res.json({
+            status: "OK",
+            data: product
+        });
+    } catch (error) {
+        console.log(error.message);
+        res.json({
+            status: error,
+            message: error.message,
+        });
+    }
+} 
+
