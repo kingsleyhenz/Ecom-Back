@@ -14,6 +14,6 @@ userRoute.post("/login", logIn);
 userRoute.post("/upload-profile-picture", upload.single("profilepicture"), profilePic);
 userRoute.post("/upload-to-sellCart", createProduct);
 userRoute.get("/getProducts", getAllProduct);
-
+userRoute.get("/getCategory/:category", getProductByCategory)
 
 export default userRoute

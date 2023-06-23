@@ -40,3 +40,25 @@ export const getAllProduct = async(req,res)=>{
     }
 } 
 
+export const getProductByCategory = async(req,res)=>{
+    const { category } = req.params;
+    try {
+        const products = await Product.find({category});
+        if(!products){
+            res.json({
+                status: "Error",
+                message: "Category Does Not Exist"
+            });
+        }
+        res.json({
+            status: "success",
+            data: products
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.json({
+            status: "error",
+            message: "error.message"
+        })
+    }
+}
