@@ -65,6 +65,10 @@ const userSchema = new mongoose.Schema({
     profilepicture:{
         type: String,
     },
+    sellCart:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+    },
     accountStatus: {
         type: String,
         enum: ["Active", "Suspended", "Deleted"],
