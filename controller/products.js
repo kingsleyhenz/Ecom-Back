@@ -62,3 +62,22 @@ export const getProductByCategory = async(req,res)=>{
         })
     }
 }
+
+export const getBySubCategory = async(req,res)=>{
+    const {SubCategory} = req.params;
+    try {
+        const subCate = await Product.find({SubCategory})
+        if(!subCate){
+            res.json({
+                status: "Error",
+                message: "This Category does not exist"
+            })
+        }
+        res.json({
+            status: "Success",
+            data: subCate
+        })
+    } catch (error) {
+        
+    }
+}
