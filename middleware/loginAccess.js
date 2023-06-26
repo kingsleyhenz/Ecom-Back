@@ -1,5 +1,5 @@
-import { ObtainToken } from "../utils/getToken";
-import { verifyToken } from "../utils/tokenVerification";
+import { ObtainToken } from "../utils/getToken.js";
+import { verifyToken } from "../utils/tokenVerification.js";
 
 export const loggedIn = (req, res, next) => {
     try{
