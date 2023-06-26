@@ -8,9 +8,7 @@ export const addToCart = async (req, res) => {
       message: "User not logged in",
     });
   }
-
-  const { productId } = req.body;
-
+  const { productId } = req.params;
   try {
     const product = await Product.findById(productId);
     if (!product) {
@@ -19,7 +17,6 @@ export const addToCart = async (req, res) => {
         message: "Product not found",
       });
     }
-
     const user = await UserMod.findById(req.userAuth);
     if (!user) {
       return res.status(404).json({
@@ -27,7 +24,6 @@ export const addToCart = async (req, res) => {
         message: "User not found",
       });
     }
-
     user.cart.push(product);
     await user.save();
 
@@ -44,3 +40,31 @@ export const addToCart = async (req, res) => {
     });
   }
 };
+
+export const getCart = async (req, res) => {
+  if (!req.userAuth) {
+    return res.status(401).json({
+      status: "error",
+      message: "User not logged in",
+    });
+  }
+  try {
+    const user = await UserMod.findById(req.userAuth).populate("cart");
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+    res.json({
+      status: "success",
+      data: user.cart,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to retrieve cart items",
+    });
+  }
+}

@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import { mongoDB } from './config/db.js';
 import userRoute from './route/userRoute.js';
+import cartRouter from './route/cartRoute.js';
+import itemRoute from './route/productRoute.js';
 
 dotenv.config();
 const app = express();
@@ -34,7 +36,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/api/v1/user", userRoute)
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/cart",cartRouter);
+app.use("/api/v1/products", itemRoute);
 
 const PORT = process.env.PORT || 2000
 app.listen(PORT,console.log(`Server is running at ${PORT}`))
