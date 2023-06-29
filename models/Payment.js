@@ -1,12 +1,7 @@
 import mongoose from "mongoose";
 
 const paymentMethodSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    enum: ["Credit Card", "Bank Transfer"],
-    required: true,
-  },
-  type: {
+  paymentType: {
     type: String,
     enum: ["Paystack", "Flutterwave"],
     required: true,
