@@ -1,4 +1,8 @@
 import nodemailer from 'nodemailer'
+import dotenv from "dotenv";
+
+
+dotenv.config()
 
 export const sendConfirmationEmail = async (name, email, otp) => {
     try {
@@ -8,7 +12,7 @@ export const sendConfirmationEmail = async (name, email, otp) => {
         secure: true,
         auth: {
           user: "ayehenz29@gmail.com",
-          pass: "xfkpqulivwwhwisc",
+          pass: process.env.EMAIL_PASS,
         },
       });
   

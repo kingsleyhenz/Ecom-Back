@@ -43,7 +43,7 @@ export const verifyOTP = async (req, res) => {
         message: "User not found",
       });
     }
-    if (otp !== user.otp) {
+    if (otp !== existingUser.otp) {
       return res.json({
         status: "error",
         message: "Invalid OTP",
@@ -83,7 +83,7 @@ export const completeReg = async(req,res)=>{
       return res.json({
         status: "success",
         message: "Profile updated successfully",
-        data: user,
+        data: existingUser,
       });
    } catch (error) {
     return res.json({

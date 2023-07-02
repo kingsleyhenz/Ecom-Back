@@ -8,7 +8,8 @@ export const addToCart = async (req, res) => {
       message: "User not logged in",
     });
   }
-  const { productId } = req.params;
+
+  const { productId, quantity } = req.body;
   try {
     const product = await Product.findById(productId);
     if (!product) {
@@ -24,9 +25,18 @@ export const addToCart = async (req, res) => {
         message: "User not found",
       });
     }
-    user.cart.push(product);
+    const existingCartItem = user.cart.find(item => item.product.toString() === productId);
+    if (existingCartItem) {
+      existingCartItem.quantity += quantity || 1;
+    } else {
+      // Product not in cart, add a new cart item
+      const cartItem = {
+        product: product._id,
+        quantity: quantity || 1,
+      };
+      user.cart.push(cartItem);
+    }
     await user.save();
-
     res.json({
       status: "success",
       message: "Item added to cart",
@@ -69,6 +79,44 @@ export const getCart = async (req, res) => {
   }
 }
 
+export const getTotalAmount = async (req, res) => {
+  if (!req.userAuth) {
+    return res.status(401).json({
+      status: "error",
+      message: "User not logged in",
+    });
+  }
+  try {
+    const user = await UserMod.findById(req.userAuth).populate("cart.product");
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+    let totalAmount = 0;
+    for (const cartItem of user.cart) {
+      const { product, quantity } = cartItem;
+      const { price } = product;
+      totalAmount += price * quantity;
+    }
+    res.json({
+      status: "success",
+      data: {
+        totalAmount,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to calculate the total amount",
+    });
+  }
+};
+
+
+
 export const removeItem = async (req, res) => {
   if (!req.userAuth) {
     return res.status(401).json({
@@ -85,13 +133,19 @@ export const removeItem = async (req, res) => {
         message: 'User not found',
       });
     }
-    const updatedCart = user.cart.filter((item) => item._id.toString() !== productId);
-    user.cart = updatedCart;
+    const index = user.cart.findIndex((item) => item.product.toString() === productId);
+    if (index === -1) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Item not found in cart',
+      });
+    }
+    user.cart.splice(index, 1);
     await user.save();
-      res.json({
+    res.json({
       status: 'success',
       message: 'Item removed from cart',
-      data: updatedCart,
+      data: user.cart,
     });
   } catch (error) {
     console.log(error);

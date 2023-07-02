@@ -1,8 +1,5 @@
 import Product from "../models/Products.js";
-import Stripe from "stripe";
-import dotenv from 'dotenv'
-import UserMod from "../models/UserModel.js";
-dotenv.config();
+
 
 export const createProduct = async(req,res) =>{
     const {category, SubCategory, Model, specs, price, description, imageUrl} = req.body;
