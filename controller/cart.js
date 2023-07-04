@@ -2,13 +2,6 @@ import Product from "../models/Products.js";
 import UserMod from "../models/UserModel.js";
 
 export const addToCart = async (req, res) => {
-  if (!req.userAuth) {
-    return res.status(401).json({
-      status: "error",
-      message: "User not logged in",
-    });
-  }
-
   const { productId, quantity } = req.body;
   try {
     const product = await Product.findById(productId);
@@ -18,6 +11,7 @@ export const addToCart = async (req, res) => {
         message: "Product not found",
       });
     }
+
     const user = await UserMod.findById(req.userAuth);
     if (!user) {
       return res.status(404).json({
@@ -25,22 +19,35 @@ export const addToCart = async (req, res) => {
         message: "User not found",
       });
     }
+
     const existingCartItem = user.cart.find(item => item.product.toString() === productId);
     if (existingCartItem) {
-      existingCartItem.quantity += quantity || 1;
-    } else {
-      // Product not in cart, add a new cart item
-      const cartItem = {
-        product: product._id,
-        quantity: quantity || 1,
-      };
-      user.cart.push(cartItem);
+      const newQuantity = parseInt(quantity) || 1;
+      existingCartItem.quantity += newQuantity;
+      await user.save();
+      return res.json({
+        status: "success",
+        message: "Item quantity updated in cart",
+        data: {
+          product: product,
+          quantity: existingCartItem.quantity,
+        },
+      });
     }
+
+    const cartItem = {
+      product: product._id,
+      quantity: parseInt(quantity) || 1,
+    };
+    user.cart.push(cartItem);
     await user.save();
     res.json({
       status: "success",
       message: "Item added to cart",
-      data: user.cart,
+      data: {
+        product: product,
+        quantity: cartItem.quantity,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -50,6 +57,7 @@ export const addToCart = async (req, res) => {
     });
   }
 };
+
 
 export const getCart = async (req, res) => {
   if (!req.userAuth) {
@@ -132,7 +140,7 @@ export const removeItem = async (req, res) => {
         status: 'error',
         message: 'User not found',
       });
-    }
+    } 
     const index = user.cart.findIndex((item) => item.product.toString() === productId);
     if (index === -1) {
       return res.status(404).json({
@@ -155,3 +163,35 @@ export const removeItem = async (req, res) => {
     });
   }
 };
+
+export const clearCart = async(req,res)=>{
+      if (!req.userAuth) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'User not logged in',
+    });
+  }
+  try {
+    const user = await UserMod.findById(req.userAuth)
+    if(!user){
+      res.json({
+        status: 'error',
+        message: 'User not found',
+      })
+    }
+    const tot = user.cart.length
+    user.cart.splice(0, tot);
+    await user.save();
+    res.json({
+      status: "success",
+      message: "Cart cleared successfully",
+      data: user.cart,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to clear cart",
+    });
+  }
+}
