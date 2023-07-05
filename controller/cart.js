@@ -126,43 +126,40 @@ export const getTotalAmount = async (req, res) => {
 
 
 export const removeItem = async (req, res) => {
-  if (!req.userAuth) {
-    return res.status(401).json({
-      status: 'error',
-      message: 'User not logged in',
-    });
-  }
   const { productId } = req.params;
   try {
     const user = await UserMod.findById(req.userAuth);
     if (!user) {
       return res.status(404).json({
-        status: 'error',
-        message: 'User not found',
-      });
-    } 
-    const index = user.cart.findIndex((item) => item.product.toString() === productId);
-    if (index === -1) {
-      return res.status(404).json({
-        status: 'error',
-        message: 'Item not found in cart',
+        status: "error",
+        message: "User not found",
       });
     }
-    user.cart.splice(index, 1);
+
+    const item = user.cart.find((item) => item.product && item.product.toString() === productId);
+    if (!item) {
+      return res.status(404).json({
+        status: "error",
+        message: "Item not found in cart",
+      });
+    }
+
+    const itemIndex = user.cart.indexOf(item);
+    user.cart.splice(itemIndex, 1);
     await user.save();
     res.json({
-      status: 'success',
-      message: 'Item removed from cart',
-      data: user.cart,
+      status: "success",
+      message: "Item removed from cart",
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      status: 'error',
-      message: 'Failed to remove item from cart',
+      status: "error",
+      message: "Failed to remove item from cart",
     });
   }
 };
+
 
 export const clearCart = async(req,res)=>{
       if (!req.userAuth) {

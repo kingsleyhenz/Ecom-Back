@@ -1,30 +1,42 @@
-
 import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema({
-  carts: {
-    type: Object,
-    required: true,
-  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }, 
+  cart: [{
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+  }],
   shippingAddress: {
     type: {
       country: {
-          type: String,
-          required: true
+        type: String,
+        required: true
       },
       city: {
-          type: String,
-          required: true
+        type: String,
+        required: true
       },
       address: {
-          type: String,
-          required: true
+        type: String,
+        required: true
       }
+    },
+    required: true
   },
-  },
-  deliveryType:{
+  deliveryType: {
     type: String,
-    enum: ["Pick-Up Station", "Door Delivery"]
+    enum: ["Pick-Up Station", "Door Delivery"],
+    required: true
   },
   dateOrdered: {
     type: Date,
@@ -38,9 +50,9 @@ const orderSchema = new mongoose.Schema({
     enum: ['Pending', 'Shipped', 'Delivered'],
     default: 'Pending',
   },
-  paymentMethod:{
+  paymentMethod: {
     type: String,
-    enum: ["Stripe","PayStack"],
+    enum: ["Stripe", "PayStack"],
     required: true,
   }
 });
