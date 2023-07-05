@@ -1,28 +1,50 @@
+
 import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema({
-  products: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-    required: true
-  }],
-  totalPrice: {
-    type: Number,
-    required: true
+  carts: {
+    type: Object,
+    required: true,
   },
   shippingAddress: {
-    type: String,
-    required: true
+    type: {
+      country: {
+          type: String,
+          required: true
+      },
+      city: {
+          type: String,
+          required: true
+      },
+      address: {
+          type: String,
+          required: true
+      }
   },
-  createdAt: {
+  },
+  deliveryType:{
+    type: String,
+    enum: ["Pick-Up Station", "Door Delivery"]
+  },
+  dateOrdered: {
     type: Date,
     default: Date.now,
-    get: function() {
-      return this._createdAt.toLocaleDateString('en-US');
-    }
+  },
+  dateDelivered: {
+    type: Date,
+  },
+  deliveryStatus: {
+    type: String,
+    enum: ['Pending', 'Shipped', 'Delivered'],
+    default: 'Pending',
+  },
+  paymentMethod:{
+    type: String,
+    enum: ["Stripe","PayStack"],
+    required: true,
   }
 });
 
 const Order = mongoose.model('Order', orderSchema);
 
-module.exports = Order;
+export default Order;
