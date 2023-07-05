@@ -19,12 +19,10 @@ export const checkout = async (req, res) => {
         message: "User not found",
       });
     }
-
     const cartItems = user.cart.map((item) => ({
       product: item.product._id,
       quantity: item.quantity,
     }));
-
     const order = new Order({
       user: user._id,
       cart: cartItems,
@@ -63,7 +61,6 @@ export const getOrder = async (req, res) => {
         message: "User not logged in",
       });
     }
-  
     try {
       const user = await UserMod.findById(req.userAuth);
       if (!user) {
@@ -72,9 +69,7 @@ export const getOrder = async (req, res) => {
           message: "User not found",
         });
       }
-  
       const orders = await Order.find({ user: user._id });
-  
       res.json({
         status: "success",
         data: {
