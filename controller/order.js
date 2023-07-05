@@ -84,3 +84,34 @@ export const getOrder = async (req, res) => {
       });
     }
   };
+
+
+export const markOrderDelivered = async (req, res) => {
+    const { orderId } = req.params;  
+    try {
+      const order = await Order.findById(orderId);
+      if (!order) {
+        return res.status(404).json({
+          status: "error",
+          message: "Order not found",
+        });
+      }
+      order.deliveryStatus = "Delivered";
+      order.dateDelivered = new Date();
+      await order.save();
+      res.json({
+        status: "success",
+        message: "Order delivery status updated",
+        data: {
+          order: order,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "error",
+        message: "Failed to update delivery status",
+      });
+    }
+  };
+  
