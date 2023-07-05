@@ -35,7 +35,8 @@ export const checkout = async (req, res) => {
 
     await order.save();
 
-    user.cart = []; // Clear the user's cart
+    user.cart = [];
+    user.orders.push(order._id);
     await user.save();
 
     res.json({
