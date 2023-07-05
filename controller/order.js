@@ -53,3 +53,38 @@ export const checkout = async (req, res) => {
     });
   }
 };
+
+
+export const getOrder = async (req, res) => {
+    if (!req.userAuth) {
+      return res.status(401).json({
+        status: "error",
+        message: "User not logged in",
+      });
+    }
+  
+    try {
+      const user = await UserMod.findById(req.userAuth);
+      if (!user) {
+        return res.status(404).json({
+          status: "error",
+          message: "User not found",
+        });
+      }
+  
+      const orders = await Order.find({ user: user._id });
+  
+      res.json({
+        status: "success",
+        data: {
+          orders: orders,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "error",
+        message: "Failed to retrieve orders",
+      });
+    }
+  };
