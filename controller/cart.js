@@ -238,3 +238,37 @@ export const addToWishlist = async (req, res) => {
     });
   }
 };
+
+export const removeFromWishlist = async (req, res) => {
+  const { productId } = req.params;
+  try {
+    const user = await UserMod.findById(req.userAuth);
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found',
+      });
+    }
+    const productIndex = user.wishlist.findIndex(
+      (item) => item.product.toString() === productId
+    );
+    if (productIndex === -1) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Product not found in wishlist',
+      });
+    }
+    user.wishlist.splice(productIndex, 1);
+    await user.save();
+    res.json({
+      status: 'success',
+      message: 'Product removed from wishlist',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to remove product from wishlist',
+    });
+  }
+};
