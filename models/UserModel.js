@@ -62,10 +62,12 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    wishlist:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product"
-    }],
+    wishlist: [{
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+        },
+      }],
     paymentMethod:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "PaymentMethod"

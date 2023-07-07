@@ -192,3 +192,49 @@ export const clearCart = async(req,res)=>{
     });
   }
 }
+
+
+export const addToWishlist = async (req, res) => {
+  const { productId } = req.body;
+  try {
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        status: "error",
+        message: "Product not found",
+      });
+    }
+    const user = await UserMod.findById(req.userAuth);
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+    const existingItem = user.wishlist.find(item => item.product.toString() === productId);
+    if (existingItem) {
+      return res.json({
+        status: "error",
+        message: "Item already in wishlist",
+      });
+    }
+    const wishlistItem = {
+      product: product._id,
+    };
+    user.wishlist.push(wishlistItem);
+    await user.save();
+    res.json({
+      status: "success",
+      message: "Item added to wishlist",
+      data: {
+        product: product,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to add item to wishlist",
+    });
+  }
+};
