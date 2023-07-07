@@ -1,6 +1,6 @@
 import express from 'express';
 import { loggedIn } from '../middleware/loginAccess.js';
-import { addToCart, clearCart, getCart, getTotalAmount, removeItem } from './../controller/cart.js';
+import { addToCart, addToWishlist, clearCart, getCart, getTotalAmount, removeFromWishlist, removeItem } from './../controller/cart.js';
 import { checkout, markOrderDelivered } from '../controller/order.js';
 
 const cartRouter = express.Router();
@@ -18,6 +18,10 @@ cartRouter.delete("/clear-cart", loggedIn, clearCart);
 cartRouter.post("/checkout", loggedIn, checkout);
 
 cartRouter.post("/delivery/:orderId", markOrderDelivered);
+
+cartRouter.post("/wishlist", loggedIn, addToWishlist);
+
+cartRouter.delete("/remove-wishlist", loggedIn, removeFromWishlist);
 
 
 export default cartRouter
