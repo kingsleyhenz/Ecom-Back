@@ -1,6 +1,6 @@
 import express from 'express';
 import { loggedIn } from '../middleware/loginAccess.js';
-import { addToCart, addToWishlist, clearCart, getCart, getTotalAmount, removeFromWishlist, removeItem } from './../controller/cart.js';
+import { addToCart, addToWishlist, clearCart, getCart, getTotalAmount, getWishlist, removeFromWishlist, removeItem } from './../controller/cart.js';
 import { cancelOrder, checkout, markOrderDelivered } from '../controller/order.js';
 
 const cartRouter = express.Router();
@@ -21,9 +21,11 @@ cartRouter.delete("/cancel/:orderId", loggedIn, cancelOrder)
 
 cartRouter.post("/delivery/:orderId", markOrderDelivered);
 
-cartRouter.post("/wishlist", loggedIn, addToWishlist);
+cartRouter.post("/addwishlist", loggedIn, addToWishlist);
 
-cartRouter.delete("/remove-wishlist", loggedIn, removeFromWishlist);
+cartRouter.get("/wishlist", loggedIn, getWishlist);
+
+cartRouter.delete("/remove-list/:productId", loggedIn, removeFromWishlist);
 
 
 

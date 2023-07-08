@@ -239,6 +239,39 @@ export const addToWishlist = async (req, res) => {
   }
 };
 
+
+export const getWishlist = async (req, res) => {
+  if (!req.userAuth) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'User not logged in',
+    });
+  }
+  try {
+    const user = await UserMod.findById(req.userAuth).populate('wishlist.product');
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found',
+      });
+    }
+    res.json({
+      status: 'success',
+      data: {
+        wishlist: user.wishlist,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to get wishlist',
+    });
+  }
+};
+
+
+
 export const removeFromWishlist = async (req, res) => {
   const { productId } = req.params;
   try {
