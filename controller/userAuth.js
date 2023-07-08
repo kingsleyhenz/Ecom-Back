@@ -103,7 +103,8 @@ export const profilePic = async(req,res)=>{
       );
       if (!existingUser) {
         return res.status(404).json({
-           message: "User not found" });
+           message: "User not found"
+           });
       }
       return res.status(200).json({
          message: "Profile picture uploaded successfully" 

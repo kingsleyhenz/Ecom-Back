@@ -115,3 +115,44 @@ export const markOrderDelivered = async (req, res) => {
     }
   };
   
+
+export const cancelOrder = async (req, res) => {
+    const { orderId } = req.params;
+    try {
+      const order = await Order.findById(orderId).populate('user');
+      if (!order) {
+        return res.status(404).json({
+          status: 'error',
+          message: 'Order not found',
+        });
+      }
+      if (order.user._id.toString() !== req.userAuth._id.toString()) {
+        return res.status(401).json({
+          status: 'error',
+          message: 'Unauthorized to cancel this order',
+        });
+      }
+      if (order.deliveryStatus !== 'Pending' && order.deliveryStatus !== 'Shipped') {
+        return res.status(403).json({
+          status: 'error',
+          message: 'Unable to cancel this order',
+        });
+      }
+      order.deliveryStatus = 'Canceled';
+      await order.save();
+      res.json({
+        status: 'success',
+        message: 'Order canceled successfully',
+        data: {
+          order: order,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to cancel order',
+      });
+    }
+  };
+  
