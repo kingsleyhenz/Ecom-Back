@@ -151,3 +151,30 @@ export const logIn = async (req, res) => {
     });
   }
 };
+
+export const sendResetPasswordEmail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await UserMod.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found',
+      });
+    }
+    const resetToken = bcrypt.genSaltSync(10);
+    user.resetToken = resetToken;
+    await user.save();
+    await sendResetPasswordEmail(user.name, user.email, resetToken);
+    res.json({
+      status: 'success',
+      message: 'Password reset email sent',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to send password reset email',
+    });
+  }
+};

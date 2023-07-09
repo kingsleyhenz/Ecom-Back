@@ -84,6 +84,10 @@ const userSchema = new mongoose.Schema({
         enum: ["Active", "Suspended", "Deleted"],
         default: "Active",
       },
+      resetToken: {
+        type: String,
+        default: null,
+      },
       lastLogin: {
         type: Date,
       },

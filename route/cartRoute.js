@@ -23,7 +23,7 @@ cartRouter.post("/delivery/:orderId", markOrderDelivered);
 
 cartRouter.post("/addwishlist", loggedIn, addToWishlist);
 
-cartRouter.get("/wishlist", loggedIn, getWishlist);
+cartRouter.get("/wishlist", loggedIn, getWishlist); 
 
 cartRouter.delete("/remove-list/:productId", loggedIn, removeFromWishlist);
 
