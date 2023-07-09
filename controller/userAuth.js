@@ -139,9 +139,11 @@ export const logIn = async (req, res) => {
       });
     }
     const token = tokenGen(existingUser);
+    existingUser.lastLogin = Date.now();
+    existingUser.save();
     res.status(200).json({
       status: "success",
-      token,
+      token, 
     });
   } catch (error) {
     console.log(error);
@@ -175,6 +177,64 @@ export const sendResetPasswordEmail = async (req, res) => {
     res.status(500).json({
       status: 'error',
       message: 'Failed to send password reset email',
+    });
+  }
+};
+
+
+export const updateProfilePicture = async (req, res) => {
+  const { profilePicture } = req.body;
+  try {
+    const user = await UserMod.findById(req.userAuth);
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+    user.profilepicture = profilePicture;
+    await user.save();
+    res.json({
+      status: "success",
+      message: "User profile picture updated successfully",
+      data: {
+        user: user,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to update user profile picture",
+    });
+  }
+};
+
+
+export const updateAddress = async (req, res) => {
+  const { address } = req.body;
+  try {
+    const user = await UserMod.findById(req.userAuth);
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+    user.address = address;
+    await user.save();
+    res.json({
+      status: "success",
+      message: "User address updated successfully",
+      data: {
+        user: user,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to update user address",
     });
   }
 };
