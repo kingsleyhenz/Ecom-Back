@@ -181,6 +181,32 @@ export const sendResetPasswordEmail = async (req, res) => {
   }
 };
 
+export const resetPassword = async (req, res) => {
+  const { resetToken, newPassword } = req.body;
+  try {
+    const user = await UserMod.findOne({ resetToken });
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Invalid or expired reset token',
+      });
+    }
+    user.password = newPassword;
+    user.resetToken = null;
+    await user.save();
+    res.json({
+      status: 'success',
+      message: 'Password reset successful',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to reset password',
+    });
+  }
+};
+
 
 export const updateProfilePicture = async (req, res) => {
   const { profilePicture } = req.body;
