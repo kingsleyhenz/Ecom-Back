@@ -32,6 +32,11 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    availability:{
+        type: String,
+        enum: ["Available","Out of stock"],
+        default: "Available",
+    },
     createdAt: {
         type: Date,
         default: Date.now,
