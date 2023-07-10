@@ -57,7 +57,7 @@ export const payWithStripe = async (req, res) => {
 };
 
 
-export const payWPaystack = async (req, res) => {
+export const  payWPaystack = async (req, res) => {
   if (!req.userAuth) {
     return res.status(401).json({
       status: 'error',
@@ -88,7 +88,7 @@ export const payWPaystack = async (req, res) => {
       path: '/transaction/initialize',
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        Authorization: `Bearer ${process.env.PAYSTACK_KEY}`,
         'Content-Type': 'application/json',
       },
     };
@@ -130,7 +130,7 @@ export const handleStripeWebhook = async (req, res) => {
       // Add more cases for other event types as needed
       default:
         // Handle other events
-        break;
+        break; 
     }
     res.json({ received: true });
   } catch (error) {
