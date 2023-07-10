@@ -68,7 +68,7 @@ export const verifyOTP = async (req, res) => {
 
   
 export const completeReg = async(req,res)=>{
-   const {email, DateOfBirth, address} = req.body;
+   const {email, DateOfBirth, address, phoneNumber} = req.body;
    try {
       const existingUser = await UserMod.findOne({email})
       if (!existingUser) {
@@ -79,6 +79,7 @@ export const completeReg = async(req,res)=>{
       }
       existingUser.DateOfBirth = DateOfBirth;
       existingUser.address = address;
+      existingUser.phoneNumber = phoneNumber;
       await existingUser.save();
       return res.json({
         status: "success",
@@ -232,6 +233,35 @@ export const updateProfilePicture = async (req, res) => {
     res.status(500).json({
       status: "error",
       message: "Failed to update user profile picture",
+    });
+  }
+};
+
+
+export const updatePhoneNumber = async (req, res) => {
+  const { phoneNumber } = req.body;
+  try {
+    const exsitingUser = await UserMod.findById(req.userAuth);
+    if (!exsitingUser) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+    exsitingUser.phoneNumber = phoneNumber;
+    await exsitingUser.save();
+    res.json({
+      status: "success",
+      message: "User address updated successfully",
+      data: {
+        exsitingUser: exsitingUser,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to update user address",
     });
   }
 };

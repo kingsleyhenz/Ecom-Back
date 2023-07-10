@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { Register, completeReg, profilePic, verifyOTP, logIn, updateProfilePicture, updateAddress, sendResetPasswordEmail, resetPassword } from "../controller/userAuth.js";
+import { Register, completeReg, profilePic, verifyOTP, logIn, updateProfilePicture, updateAddress, sendResetPasswordEmail, resetPassword, updatePhoneNumber } from "../controller/userAuth.js";
 import { loggedIn } from "../middleware/loginAccess.js";
 
 
@@ -23,9 +23,11 @@ userRoute.post("update-profile-picture", loggedIn, updateProfilePicture);
 
 userRoute.put("/update-address", loggedIn, updateAddress);
 
+userRoute.put("/update-phoneNumber", loggedIn, updatePhoneNumber);
+
 userRoute.post("/reset-token", loggedIn, sendResetPasswordEmail);
 
-userRoute.post("/reset-password", loggedIn, resetPassword)
+userRoute.post("/reset-password", loggedIn, resetPassword);
 
 
 

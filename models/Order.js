@@ -33,6 +33,10 @@ const orderSchema = new mongoose.Schema({
     },
     required: true
   },
+  totalPrice: {
+    type: Number,
+    default: 0,
+  },
   deliveryType: {
     type: String,
     enum: ["Pick-Up Station", "Door Delivery"],

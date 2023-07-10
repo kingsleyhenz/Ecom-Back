@@ -34,6 +34,9 @@ const userSchema = new mongoose.Schema({
             }
         },
     },
+    phoneNumber:{
+        type: String
+    },
     cart: [
         {
           product: { 

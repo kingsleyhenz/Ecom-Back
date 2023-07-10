@@ -8,9 +8,7 @@ export const checkout = async (req, res) => {
       message: "User not logged in",
     });
   }
-
   const { shippingAddress, deliveryType, paymentMethod } = req.body;
-
   try {
     const user = await UserMod.findById(req.userAuth).populate("cart.product");
     if (!user) {
@@ -19,24 +17,26 @@ export const checkout = async (req, res) => {
         message: "User not found",
       });
     }
-    const cartItems = user.cart.map((item) => ({
+  const cartItems = user.cart.map((item) => ({
       product: item.product._id,
       quantity: item.quantity,
     }));
+    let totalPrice = 0;
+    user.cart.forEach((item) => {
+      totalPrice += item.product.price * item.quantity;
+    });
     const order = new Order({
       user: user._id,
       cart: cartItems,
       shippingAddress: shippingAddress,
       deliveryType: deliveryType,
       paymentMethod: paymentMethod,
+      totalPrice: totalPrice,
     });
-
     await order.save();
-
     user.cart = [];
     user.orders.push(order._id);
     await user.save();
-
     res.json({
       status: "success",
       message: "Order placed successfully",
