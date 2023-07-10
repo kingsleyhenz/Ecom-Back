@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
   user: {
@@ -54,10 +54,14 @@ const orderSchema = new mongoose.Schema({
     enum: ['Pending', 'Shipped', 'Delivered', 'Canceled'],
     default: 'Pending',
   },
-  paymentMethod: {
+  paymentStatus: {
     type: String,
-    enum: ["Stripe", "PayStack"],
-    required: true,
+    enum: ["Successful", "Failed", "Pending"],
+    default: "Pending",
+  },
+  paymentReference: {
+    type: String,
+    default: "",
   }
 });
 
