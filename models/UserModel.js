@@ -84,7 +84,7 @@ const userSchema = new mongoose.Schema({
     }],
     accountStatus: {
         type: String,
-        enum: ["Active", "Suspended", "Deleted"],
+        enum: ["Active", "Suspended"],
         default: "Active",
       },
       resetToken: {
