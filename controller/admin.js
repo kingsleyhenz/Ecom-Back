@@ -45,3 +45,25 @@ export const getCustomer = async(req,res)=>{
         });
       }
 }
+
+export const getAdmins = async(req,res)=>{
+    try {
+        const admins = await UserMod.find({ role: 'Admin' });
+        if (admins.length === 0) {
+          return res.json({
+            status: 'success',
+            message: 'No admins found',
+          });
+        }
+        res.json({
+          status: 'success',
+          data: admins,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          status: 'error',
+          message: 'Failed to get admins',
+        });
+      }
+}
