@@ -22,5 +22,26 @@ export const getAllUsers = async (req, res) => {
         message: 'Failed to get users',
       });
     }
-  };
+};
   
+export const getCustomer = async(req,res)=>{
+    try {
+        const customers = await UserMod.find({ role: 'Customer' });
+        if (customers.length === 0) {
+          return res.json({
+            status: 'success',
+            message: 'No customers found',
+          });
+        }
+        res.json({
+          status: 'success',
+          data: customers,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          status: 'error',
+          message: 'Failed to get customers',
+        });
+      }
+}
