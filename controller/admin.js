@@ -89,3 +89,25 @@ export const getActiveCustomers = async(req,res)=>{
         });
       }     
 }
+
+export const getBlockedCustomers = async(req,res)=>{
+    try {
+        const customers = await UserMod.find({ role: 'Customer', accountStatus: 'Suspended' });
+        if (customers.length === 0) {
+          return res.json({
+            status: 'success',
+            message: 'No active customers found',
+          });
+        }
+        res.json({
+          status: 'success',
+          data: customers,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          status: 'error',
+          message: 'Failed to get active customers',
+        });
+      }     
+}
