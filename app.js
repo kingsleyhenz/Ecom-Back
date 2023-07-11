@@ -5,7 +5,11 @@ import { mongoDB } from './config/db.js';
 import userRoute from './route/userRoute.js';
 import cartRouter from './route/cartRoute.js';
 import itemRoute from './route/productRoute.js';
-import { handleStripeWebhook, handlePaystackWebhook } from './controller/payment.js';
+import adminRoute from './route/adminRoute.js';
+// import {
+//   handleStripeWebhook,
+//   handlePaystackWebhook,} from './controller/payment.js';
+
 
 dotenv.config();
 const app = express();
@@ -42,13 +46,11 @@ app.use((req, res, next) => {
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/products", itemRoute);
+app.use("/api/v1/admin", adminRoute);
 
-// Webhook endpoints
-const stripeWebhookUrl = '/webhooks/stripe';
-const paystackWebhookUrl = '/webhooks/paystack';
-
-app.post(stripeWebhookUrl, handleStripeWebhook);
-app.post(paystackWebhookUrl, handlePaystackWebhook);
+// // Webhook endpoints
+// app.post('/webhooks/stripe', handleStripeWebhook);
+// app.post('/webhooks/paystack', handlePaystackWebhook);
 
 const PORT = process.env.PORT || 2000;
 app.listen(PORT, console.log(`Server is running on Port ${PORT}`));
