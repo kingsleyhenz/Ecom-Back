@@ -2,12 +2,13 @@ import express from 'express';
 import { loggedIn } from '../middleware/loginAccess.js';
 import { addToCart, addToWishlist, clearCart, getCart, getTotalAmount, getWishlist, removeFromWishlist, removeItem } from './../controller/cart.js';
 import { cancelOrder, checkout, markOrderDelivered } from '../controller/order.js';
+import { isBlocked } from './../middleware/accountStatus.js';
 
 const cartRouter = express.Router();
 
 cartRouter.post("/addToCart", loggedIn, addToCart); 
 
-cartRouter.get("/mycart", loggedIn, getCart);
+cartRouter.get("/mycart", loggedIn, isBlocked, getCart);
 
 cartRouter.get("/totalPrice", loggedIn, getTotalAmount);
 
