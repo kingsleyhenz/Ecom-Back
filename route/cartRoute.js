@@ -6,27 +6,27 @@ import { isBlocked } from './../middleware/accountStatus.js';
 
 const cartRouter = express.Router();
 
-cartRouter.post("/addToCart", loggedIn, addToCart); 
+cartRouter.post("/addToCart", loggedIn, isBlocked, addToCart); 
 
 cartRouter.get("/mycart", loggedIn, isBlocked, getCart);
 
-cartRouter.get("/totalPrice", loggedIn, getTotalAmount);
+cartRouter.get("/totalPrice", loggedIn, isBlocked, getTotalAmount);
 
-cartRouter.delete("/remove/:productId", loggedIn, removeItem);
+cartRouter.delete("/remove/:productId", loggedIn, isBlocked, removeItem);
 
-cartRouter.delete("/clear-cart", loggedIn, clearCart);
+cartRouter.delete("/clear-cart", loggedIn, isBlocked, clearCart);
 
-cartRouter.post("/checkout", loggedIn, checkout);
+cartRouter.post("/checkout", loggedIn, isBlocked, checkout);
 
-cartRouter.delete("/cancel/:orderId", loggedIn, cancelOrder)
+cartRouter.delete("/cancel/:orderId", loggedIn, isBlocked, cancelOrder)
 
-cartRouter.post("/delivery/:orderId", markOrderDelivered);
+cartRouter.post("/delivery/:orderId", isBlocked, markOrderDelivered);
 
-cartRouter.post("/addwishlist", loggedIn, addToWishlist);
+cartRouter.post("/addwishlist", loggedIn, isBlocked, addToWishlist);
 
-cartRouter.get("/wishlist", loggedIn, getWishlist); 
+cartRouter.get("/wishlist", loggedIn, isBlocked, getWishlist); 
 
-cartRouter.delete("/remove-list/:productId", loggedIn, removeFromWishlist);
+cartRouter.delete("/remove-list/:productId", loggedIn, isBlocked, removeFromWishlist);
 
 
 

@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import { Register, completeReg, profilePic, verifyOTP, logIn, updateProfilePicture, updateAddress, sendResetPasswordEmail, resetPassword, updatePhoneNumber } from "../controller/userAuth.js";
 import { loggedIn } from "../middleware/loginAccess.js";
+import { isBlocked } from "../middleware/accountStatus.js";
 
 
 
@@ -19,15 +20,15 @@ userRoute.post("/login", logIn);
 
 userRoute.post("/upload-profile-picture", upload.single("profilepicture"), profilePic);
 
-userRoute.post("update-profile-picture", loggedIn, updateProfilePicture);
+userRoute.post("update-profile-picture", loggedIn, isBlocked, updateProfilePicture);
 
-userRoute.put("/update-address", loggedIn, updateAddress);
+userRoute.put("/update-address", loggedIn, isBlocked, updateAddress);
 
-userRoute.put("/update-phoneNumber", loggedIn, updatePhoneNumber);
+userRoute.put("/update-phoneNumber", loggedIn, isBlocked, updatePhoneNumber);
 
-userRoute.post("/reset-token", loggedIn, sendResetPasswordEmail);
+userRoute.post("/reset-token", loggedIn, isBlocked, sendResetPasswordEmail);
 
-userRoute.post("/reset-password", loggedIn, resetPassword);
+userRoute.post("/reset-password", loggedIn, isBlocked, resetPassword);
 
 
 

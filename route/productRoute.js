@@ -1,12 +1,13 @@
 import  express  from "express";
 import { createProduct, getAllProduct, getByName, getByPrice, getBySubCategory, getProductByCategory} from './../controller/products.js';
 import { loggedIn } from './../middleware/loginAccess.js';
+import { isBlocked } from "../middleware/accountStatus.js";
 // import { payWPaystack, payWithStripe } from "../controller/payment.js";
 
 
 const itemRoute = express.Router();
 
-itemRoute.post("/upload-to-sellCart", createProduct);
+itemRoute.post("/upload-to-sellCart", isBlocked, createProduct);
 
 itemRoute.get("/get-product/:productName", getByName); 
 
