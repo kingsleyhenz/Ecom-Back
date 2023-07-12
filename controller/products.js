@@ -142,13 +142,19 @@ export const getByPrice = async(req,res)=>{
 }
 
 
-  export const updateCategory =  async(req, res) => {
+  export const updateWhole = async (req, res) => {
+    if (!req.userAuth) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'User not logged in',
+      });
+    }
     const { productId } = req.params;
-    const { category, SubCategory } = req.body;
+    const updatedFields = req.body;
     try {
       const updatedProduct = await Product.findByIdAndUpdate(
         productId,
-        { category, SubCategory },
+        updatedFields,
         { new: true }
       );
       res.json({
@@ -161,49 +167,5 @@ export const getByPrice = async(req,res)=>{
         message: 'Failed to update product',
       });
     }
-  }
-
-
-  export const updatePrice =  async(req, res) => {
-    const { productId } = req.params;
-    const { price } = req.body;
-    try {
-      const updatedProduct = await Product.findByIdAndUpdate(
-        productId,
-        { price },
-        { new: true }
-      );
-      res.json({
-        status: 'success',
-        data: updatedProduct,
-      });
-    } catch (error) {
-      res.status(500).json({
-        status: 'error',
-        message: 'Failed to update product',
-      });
-    }
-  }
-
-  export const updateName =  async(req, res) => {
-    const { productId } = req.params;
-    const { Model } = req.body;
-    try {
-      const updatedProduct = await Product.findByIdAndUpdate(
-        productId,
-        { Model },
-        { new: true }
-      );
-      res.json({
-        status: 'success',
-        data: updatedProduct,
-      });
-    } catch (error) {
-      res.status(500).json({
-        status: 'error',
-        message: 'Failed to update product',
-      });
-    }
-  }
-
+  };
   
