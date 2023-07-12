@@ -184,3 +184,26 @@ export const getByPrice = async(req,res)=>{
       });
     }
   }
+
+  export const updateName =  async(req, res) => {
+    const { productId } = req.params;
+    const { Model } = req.body;
+    try {
+      const updatedProduct = await Product.findByIdAndUpdate(
+        productId,
+        { Model },
+        { new: true }
+      );
+      res.json({
+        status: 'success',
+        data: updatedProduct,
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to update product',
+      });
+    }
+  }
+
+  
