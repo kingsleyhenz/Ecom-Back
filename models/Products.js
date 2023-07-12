@@ -28,10 +28,14 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    ratings:{
+    quantity:{
         type: Number,
-        default: 0,
+        default: 1,
     },
+    // ratings:{
+    //     type: Number,
+    //     default: 0,
+    // },
     availability:{
         type: String,
         enum: ["Available","Out of stock"],

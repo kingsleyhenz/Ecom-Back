@@ -1,6 +1,6 @@
 import UserMod from '../models/UserModel.js';
 
-export const isAdmin = (req, res, next) => {
+export const isSuper = (req, res, next) => {
   if (!req.userAuth) {
     return res.status(401).json({ message: 'Unauthorized' });
   }

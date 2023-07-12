@@ -6,10 +6,10 @@ import Order from "../models/Order.js";
 
 
 export const getAllUsers = async (req, res) => {
+  if (!req.userAuth) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
     try {
-      if (!req.userAuth) {
-        return res.status(401).json({ message: 'Unauthorized' });
-      }
       const users = await UserMod.find({});
       res.json({
         status: 'OK',
@@ -25,6 +25,9 @@ export const getAllUsers = async (req, res) => {
 };
   
 export const getCustomer = async(req,res)=>{
+  if (!req.userAuth) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
     try {
         const customers = await UserMod.find({ role: 'Customer' });
         if (customers.length === 0) {
@@ -47,6 +50,9 @@ export const getCustomer = async(req,res)=>{
 }
 
 export const getAdmins = async(req,res)=>{
+  if (!req.userAuth) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
     try {
         const admins = await UserMod.find({ role: 'Admin' });
         if (admins.length === 0) {
@@ -69,6 +75,9 @@ export const getAdmins = async(req,res)=>{
 }
 
 export const getActiveCustomers = async(req,res)=>{
+  if (!req.userAuth) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
     try {
         const customers = await UserMod.find({ role: 'Customer', accountStatus: 'Active' });
         if (customers.length === 0) {
@@ -91,6 +100,9 @@ export const getActiveCustomers = async(req,res)=>{
 }
 
 export const getBlockedCustomers = async(req,res)=>{
+  if (!req.userAuth) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
     try {
         const customers = await UserMod.find({ role: 'Customer', accountStatus: 'Suspended' });
         if (customers.length === 0) {

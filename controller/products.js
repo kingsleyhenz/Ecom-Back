@@ -2,7 +2,13 @@ import Product from "../models/Products.js";
 
 
 export const createProduct = async(req,res) =>{
-    const {category, SubCategory, Model, specs, price, description, imageUrl} = req.body;
+    if (!req.userAuth) {
+        return res.status(401).json({
+          status: 'error',
+          message: 'User not logged in',
+        });
+      }
+    const {category, SubCategory, Model, specs, price, description, imageUrl, quantity} = req.body;
     try {
         const newproduct = await Product.create({
             category,
@@ -11,7 +17,8 @@ export const createProduct = async(req,res) =>{
             price,
             specs,
             description,
-            imageUrl
+            imageUrl,
+            quantity
         })
         res.json({
             status: 201,
@@ -135,4 +142,23 @@ export const getByPrice = async(req,res)=>{
 }
 
 
-  
+  export const updateCategory =  async(req, res) => {
+    const { productId } = req.params;
+    const { category, SubCategory } = req.body;
+    try {
+      const updatedProduct = await Product.findByIdAndUpdate(
+        productId,
+        { category, SubCategory },
+        { new: true }
+      );
+      res.json({
+        status: 'success',
+        data: updatedProduct,
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to update product',
+      });
+    }
+  }

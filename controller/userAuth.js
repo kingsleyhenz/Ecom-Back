@@ -210,8 +210,14 @@ export const resetPassword = async (req, res) => {
 
 
 export const updateProfilePicture = async (req, res) => {
-  const { profilePicture } = req.body;
+  if (!req.userAuth) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'User not logged in',
+    });
+  }
   try {
+    const { profilePicture } = req.body;
     const user = await UserMod.findById(req.userAuth);
     if (!user) {
       return res.status(404).json({
@@ -239,8 +245,14 @@ export const updateProfilePicture = async (req, res) => {
 
 
 export const updatePhoneNumber = async (req, res) => {
-  const { phoneNumber } = req.body;
+  if (!req.userAuth) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'User not logged in',
+    });
+  }
   try {
+    const { phoneNumber } = req.body;
     const exsitingUser = await UserMod.findById(req.userAuth);
     if (!exsitingUser) {
       return res.status(404).json({
@@ -268,8 +280,14 @@ export const updatePhoneNumber = async (req, res) => {
 
 
 export const updateAddress = async (req, res) => {
-  const { address } = req.body;
+  if (!req.userAuth) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'User not logged in',
+    });
+  }
   try {
+    const { address } = req.body;
     const user = await UserMod.findById(req.userAuth);
     if (!user) {
       return res.status(404).json({
