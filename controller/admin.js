@@ -208,3 +208,36 @@ export const getAllOrders = async(req,res)=>{
         });
   }
 }
+
+export const makeAdmin = async(req,res)=>{
+  if(!req,userAuth){
+    req.status(401).json({ message: 'Unauthorized' })
+  }
+  const { userId } = req.params;
+  try {
+    const user = await UserMod.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found',
+      });
+    }
+    if (user.role === 'Admin') {
+      return res.status(400).json({
+        status: 'error',
+        message: 'User is already an admin',
+      });
+    }
+    user.role = 'Admin';
+    await user.save();
+    res.json({
+      status: 'success',
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to make user an admin',
+    });
+  }
+}

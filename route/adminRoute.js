@@ -1,7 +1,7 @@
 import express from "express";
 import { loggedIn } from "../middleware/loginAccess.js";
 import { isAdmin } from './../middleware/adminAccess.js';
-import { blockUser, getActiveCustomers, getAdmins, getAllOrders, getAllUsers, getBlockedCustomers, getCustomer, unBlockUser } from "../controller/admin.js";
+import { blockUser, getActiveCustomers, getAdmins, getAllOrders, getAllUsers, getBlockedCustomers, getCustomer, makeAdmin, unBlockUser } from "../controller/admin.js";
 import { isSuper } from './../middleware/superAdmin.js';
 import { createProduct, getAllProduct, updateWhole } from "../controller/products.js";
 
@@ -27,7 +27,9 @@ adminRoute.get("all-items", loggedIn, isSuper, getAllProduct);
 
 adminRoute.put("/update-product/:productId", loggedIn, isSuper, updateWhole);
 
-adminRoute.get("/orders", loggedIn, isSuper, getAllOrders);
+adminRoute.put("/makeAdmin/:userId", loggedIn, isSuper, makeAdmin);
+
+adminRoute.get("/orders", loggedIn, isSuper, getAllOrders); 
 
 
 
