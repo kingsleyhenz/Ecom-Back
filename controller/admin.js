@@ -75,22 +75,27 @@ export const getAdmins = async(req,res)=>{
 }
 
 export const blockUser = async(req,res)=>{
-  if(!req.userAuth){
-    res.status(401).json({ message: 'Unauthorized' })
-  }
   const { userId } = req.params;
   try {
-    const user = await UserMod.findByIdAndUpdate(userId, {accountStatus: 'Suspended'}, { new: true });
-    if(!user){
-      res.json({
+    const user = await UserMod.findById(userId);
+    if (!user) {
+      return res.status(404).json({
         status: 'error',
-        message: 'User not found'
-      })
+        message: 'User not found',
+      });
     }
+    if (user.accountStatus === 'Suspended') {
+      return res.status(400).json({
+        status: 'error',
+        message: 'User is already suspended',
+      });
+    }
+    user.accountStatus = 'Suspended';
+    await user.save();
     res.json({
       status: 'success',
       data: user,
-    })
+    });
   } catch (error) {
     res.status(500).json({
       status: 'error',
