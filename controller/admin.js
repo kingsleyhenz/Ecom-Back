@@ -75,6 +75,9 @@ export const getAdmins = async(req,res)=>{
 }
 
 export const blockUser = async(req,res)=>{
+  if(!req.userAuth){
+    res.status(401).json({ message: 'Unauthorized' })
+  }
   const { userId } = req.params;
   try {
     const user = await UserMod.findById(userId);
@@ -110,21 +113,29 @@ export const unBlockUser = async(req,res)=>{
   }
   const { userId } = req.params;
   try {
-    const user = await UserMod.findByIdAndUpdate(userId, {accountStatus: 'Active'}, { new: true });
-    if(!user){
-      res.json({
+    const user = await UserMod.findById(userId);
+    if (!user) {
+      return res.status(404).json({
         status: 'error',
-        message: 'User not found'
-      })
+        message: 'User not found',
+      });
     }
+    if (user.accountStatus === 'Active') {
+      return res.status(400).json({
+        status: 'error',
+        message: 'User is already active',
+      });
+    }
+    user.accountStatus = 'Active';
+    await user.save();
     res.json({
       status: 'success',
       data: user,
-    })
+    });
   } catch (error) {
     res.status(500).json({
       status: 'error',
-      message: 'Failed to suspend user',
+      message: 'Failed to unsuspend user',
     });
   }
 }
@@ -179,3 +190,21 @@ export const getBlockedCustomers = async(req,res)=>{
       }     
 }
 
+export const getAllOrders = async(req,res)=>{
+  if(!req,userAuth){
+    req.status(401).json({ message: 'Unauthorized' })
+  }
+  try {
+    const orders = await Order.find({})
+    res.json({
+      status: 'success',
+      data: orders
+    })
+  } catch (error) {
+    console.error(error);
+        res.status(500).json({
+          status: 'error',
+          message: 'Failed to get active customers',
+        });
+  }
+}
