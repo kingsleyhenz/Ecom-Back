@@ -99,6 +99,31 @@ export const blockUser = async(req,res)=>{
   }
 }
 
+export const unBlockUser = async(req,res)=>{
+  if(!req.userAuth){
+    res.status(401).json({ message: 'Unauthorized' })
+  }
+  const { userId } = req.params;
+  try {
+    const user = await UserMod.findByIdAndUpdate(userId, {accountStatus: 'Active'}, { new: true });
+    if(!user){
+      res.json({
+        status: 'error',
+        message: 'User not found'
+      })
+    }
+    res.json({
+      status: 'success',
+      data: user,
+    })
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to suspend user',
+    });
+  }
+}
+
 export const getActiveCustomers = async(req,res)=>{
   if (!req.userAuth) {
     return res.status(401).json({ message: 'Unauthorized' });
