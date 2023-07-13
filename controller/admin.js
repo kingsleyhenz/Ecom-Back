@@ -241,3 +241,35 @@ export const makeAdmin = async(req,res)=>{
     });
   }
 }
+
+
+
+export const removeAdmin = async(req,res)=>{
+  const { userId } = req.params;
+  try {
+    const user = await UserMod.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found',
+      });
+    }
+    if (user.role !== 'Admin') {
+      return res.status(400).json({
+        status: 'error',
+        message: 'User is not an admin',
+      });
+    }
+    user.role = 'Customer';
+    await user.save();
+    res.json({
+      status: 'success',
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to remove admin role from user',
+    });
+  }
+}
