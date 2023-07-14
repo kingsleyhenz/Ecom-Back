@@ -228,6 +228,24 @@ export const getShippedOrders = async(req,res)=>{
   }
 }
 
+export const getDeliveredOrders = async (req, res) => {
+  if(!req.userAuth){
+    res.status(401).json({ message: 'Unauthorized' })
+  }
+  try {
+    const orders = await Order.find({ deliveryStatus: 'Delivered'})
+    res.json({
+      status: 'success',
+      data: orders
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to get Orders'
+    })
+  }
+}
 export const makeAdmin = async(req,res)=>{
   if(!req,userAuth){
     req.status(401).json({ message: 'Unauthorized' })
