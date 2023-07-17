@@ -23,7 +23,7 @@ adminRoute.get("/suspended",loggedIn, isSuper, getBlockedCustomers);
 
 adminRoute.post("/upload-to-sellCart", loggedIn, isSuper, createProduct);
 
-adminRoute.get("all-items", loggedIn, isSuper, getAllProduct);
+adminRoute.get("/all-items", loggedIn, isSuper, getAllProduct);
 
 adminRoute.put("/update-product/:productId", loggedIn, isSuper, updateWhole);
 
