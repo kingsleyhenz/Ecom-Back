@@ -207,3 +207,16 @@ export const getByPrice = async(req,res)=>{
       });
     }
   }
+
+  export const getSellItemsByUser = async (req, res) => {
+    const userId = req.params.userId;
+    try {
+      const sellItems = await sellItem.find({ user: userId });
+      res.json({
+        status: 'success',
+        data: sellItems
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve items by user.' });
+    }
+  };

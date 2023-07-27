@@ -16,6 +16,8 @@ itemRoute.get("/getSubCategory/:SubCategory", getBySubCategory);
 
 itemRoute.get("/filterPrice/:SubCategory/:minprice/:maxprice", getByPrice);
 
+
+
 // itemRoute.post("/pay/:productId", loggedIn, payWithStripe);
 
 // itemRoute.post("/paystack", loggedIn , payWPaystack);

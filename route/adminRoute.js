@@ -3,7 +3,7 @@ import { loggedIn } from "../middleware/loginAccess.js";
 import { isAdmin } from './../middleware/adminAccess.js';
 import { blockUser, getActiveCustomers, getAdmins, getAllOrders, getAllUsers, getBlockedCustomers, getCanceledOrders, getCustomer, getDeliveredOrders, getPendingOrders, getShippedOrders, makeAdmin, removeAdmin, unBlockUser } from "../controller/admin.js";
 import { isSuper } from './../middleware/superAdmin.js';
-import { createProduct, getAllProduct, updateWhole } from "../controller/products.js";
+import { createProduct, getAllProduct, getSellItemsByUser, updateWhole } from "../controller/products.js";
 
 const adminRoute = express.Router()
 
@@ -26,6 +26,8 @@ adminRoute.post("/upload-to-sellCart", loggedIn, isSuper, createProduct);
 adminRoute.get("/all-items", loggedIn, isSuper, getAllProduct);
 
 adminRoute.put("/update-product/:productId", loggedIn, isSuper, updateWhole);
+
+adminRoute.get("/user-items/:userId", loggedIn, isSuper, getSellItemsByUser);
 
 adminRoute.put("/makeAdmin/:userId", loggedIn, isSuper, makeAdmin);
 
