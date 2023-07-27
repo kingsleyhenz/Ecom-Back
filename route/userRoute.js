@@ -3,6 +3,7 @@ import multer from "multer";
 import { Register, completeReg, profilePic, verifyOTP, logIn, updateProfilePicture, updateAddress, sendResetPasswordEmail, resetPassword, updatePhoneNumber } from "../controller/userAuth.js";
 import { loggedIn } from "../middleware/loginAccess.js";
 import { isBlocked } from "../middleware/accountStatus.js";
+import { addSellItem } from "../controller/products.js";
 
 
 
@@ -29,6 +30,8 @@ userRoute.put("/update-phoneNumber", loggedIn, isBlocked, updatePhoneNumber);
 userRoute.post("/reset-token", loggedIn, isBlocked, sendResetPasswordEmail);
 
 userRoute.post("/reset-password", loggedIn, isBlocked, resetPassword);
+
+userRoute.post("/post-sell", loggedIn, isBlocked, addSellItem);
 
 
 

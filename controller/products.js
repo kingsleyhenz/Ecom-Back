@@ -1,4 +1,5 @@
 import Product from "../models/Products.js";
+import sellItem from "../models/sellItem.js";
 
 
 export const createProduct = async(req,res) =>{
@@ -169,3 +170,40 @@ export const getByPrice = async(req,res)=>{
     }
   };
   
+  export const addSellItem = async(req,res)=>{
+    if (!req.userAuth) {
+        res.json({
+          status: 'error',
+          message: 'User not logged in'
+        })
+    }
+    const { category, SubCategory, Model, specs, price, description, imageUrl, quantity} = req.body
+    const { email, phoneNumber, address } = req.userAuth;
+    try {
+      const sellProduct = await sellItem.create({
+        user: req.userAuth._id,
+        category,
+        SubCategory,
+        Model,
+        specs,
+        price,
+        description,
+        imageUrl,
+        quantity,
+        userDetails: {
+          email: req.userAuth.email,
+          phoneNumber: req.userAuth.phoneNumber,
+          address: address.address,
+        }, 
+      })
+      res.json({
+        status: 201,
+        data: sellProduct,
+    });
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to Add to Selling Cart',
+      });
+    }
+  }

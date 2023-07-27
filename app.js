@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/products", itemRoute);
-app.use("/api/v1/admin", adminRoute);
+app.use("/api/v1/admin", adminRoute); 
 
 // // Webhook endpoints
 // app.post('/webhooks/stripe', handleStripeWebhook);

@@ -1,4 +1,4 @@
-import mongoose from mongoose;
+import mongoose from "mongoose"; 
 
 const sellSchema = new mongoose.Schema({
     user:{
@@ -35,6 +35,22 @@ const sellSchema = new mongoose.Schema({
     quantity:{
         type: Number,
         default: 1,
+    },
+    userDetails:{
+        type: {
+            email: {
+                type: String,
+                required: true
+            },
+            phoneNumber: {
+                type: String,
+                required: true
+            },
+            address: {
+                type: String,
+                required: true
+            }
+        },
     },
     createdAt: {
         type: Date,

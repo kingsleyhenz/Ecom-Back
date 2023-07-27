@@ -12,7 +12,7 @@ adminRoute.get("/allUsers",loggedIn, isSuper, getAllUsers);
 adminRoute.get("/customers",loggedIn, isSuper, getCustomer);
 
 adminRoute.get("/allAdmins",loggedIn, isSuper, getAdmins);
-
+    
 adminRoute.put("/block/:userId",loggedIn, isSuper, blockUser);
 
 adminRoute.put("/unblock/:userId",loggedIn, isSuper, unBlockUser);

@@ -80,7 +80,7 @@ const userSchema = new mongoose.Schema({
     },
     sellCart:[{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product"
+        ref: "sellItem"
     }],
     accountStatus: {
         type: String,
