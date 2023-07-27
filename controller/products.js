@@ -248,3 +248,16 @@ export const getByPrice = async(req,res)=>{
       });
     }
   };
+
+  export const getItemsByName = async (req, res) => {
+    const model = req.params.model;
+    try {
+      const sellItems = await sellItem.find({ Model: model });
+      res.json({
+        status: 'success',
+        data: sellItems
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve items by model.' });
+    }
+  };
