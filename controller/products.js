@@ -220,3 +220,16 @@ export const getByPrice = async(req,res)=>{
       res.status(500).json({ error: 'Failed to retrieve items by user.' });
     }
   };
+
+  export const getItemsByCategory = async (req, res) => {
+    const category = req.params.category;
+    try {
+      const sellItems = await sellItem.find({ category });
+      res.json({
+        status: 'success',
+        data: sellItems
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve items by category.' });
+    }
+  };
