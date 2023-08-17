@@ -143,7 +143,6 @@ export const removeItem = async (req, res) => {
         message: "Item not found in cart",
       });
     }
-
     const itemIndex = user.cart.indexOf(item);
     user.cart.splice(itemIndex, 1);
     await user.save();

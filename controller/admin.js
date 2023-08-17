@@ -12,7 +12,7 @@ export const getAllUsers = async (req, res) => {
     try {
       const users = await UserMod.find({});
       res.json({
-        status: 'OK',
+        status: 'success',
         data: users,
       });
     } catch (error) {

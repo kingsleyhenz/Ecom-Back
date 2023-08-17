@@ -22,7 +22,7 @@ export const createProduct = async(req,res) =>{
             quantity
         })
         res.json({
-            status: 201,
+            status: 'success',
             data: newproduct,
         });
     } catch (error) {
@@ -38,7 +38,7 @@ export const getAllProduct = async(req,res)=>{
     try {
         const product = await Product.find({});
         res.json({
-            status: "OK",
+            status: "success",
             data: product
         });
     } catch (error) {
@@ -106,7 +106,7 @@ export const getByName = async (req, res) => {
         });
       }
       res.json({
-        status: "OK",
+        status: "success",
         data: prod,
       });
     } catch (error) {
@@ -130,7 +130,7 @@ export const getByPrice = async(req,res)=>{
             })
         }
         res.json({
-            status: "OK",
+            status: "success",
             data: foundRange
         })
     } catch (error) {
