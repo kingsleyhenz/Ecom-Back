@@ -34,7 +34,7 @@ export const Register = async (req, res) => {
   };
 
 export const verifyOTP = async (req, res) => {
-  const { email, otp, password } = req.body;
+  const { email, otp } = req.body;
   try {
     const existingUser = await UserMod.findOne({ email });
     if (!existingUser) {
@@ -49,14 +49,11 @@ export const verifyOTP = async (req, res) => {
         message: "Invalid OTP",
       });
     }
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    existingUser.password = hashedPassword;
     existingUser.otp = undefined;
     await existingUser.save();
     return res.json({
       status: "success",
-      message: "Password set successfully",
+      message: "Email Successfully Verified",
     });
   } catch (error) {
     return res.json({
@@ -68,7 +65,7 @@ export const verifyOTP = async (req, res) => {
 
   
 export const completeReg = async(req,res)=>{
-   const {email, DateOfBirth, address, phoneNumber} = req.body;
+   const {email, password} = req.body;
    try {
       const existingUser = await UserMod.findOne({email})
       if (!existingUser) {
@@ -77,13 +74,13 @@ export const completeReg = async(req,res)=>{
           message: "User not found",
         });
       }
-      existingUser.DateOfBirth = DateOfBirth;
-      existingUser.address = address;
-      existingUser.phoneNumber = phoneNumber;
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    existingUser.password = hashedPassword;
       await existingUser.save();
       return res.json({
         status: "success",
-        message: "Profile updated successfully",
+        message: "Password set successfully",
         data: existingUser,
       });
    } catch (error) {
@@ -132,7 +129,7 @@ export const logIn = async (req, res) => {
         message: "User not found",
       });
     }
-    const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+    const isPasswordValid = bcrypt.compare(password, existingUser.password);
     if (!isPasswordValid) {
       return res.status(401).json({
         status: "error",
