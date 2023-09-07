@@ -34,6 +34,32 @@ export const createProduct = async(req,res) =>{
     }
 }
 
+  export const getAllCategories = async (req, res) => {
+  try {
+    const categories = await Product.distinct("category");
+    const categoryWithSubs = [];
+    for (const category of categories) {
+      const subcategories = await Product.distinct("SubCategory", {
+        category: category,
+      });
+      categoryWithSubs.push({
+        category: category,
+        subcategories: subcategories,
+      });
+    }
+    res.json({
+      status: "success",
+      data: categoryWithSubs
+  });
+  } catch (error) {
+    console.log(error.message);
+    res.json({
+        status: error,
+        message: error.message,
+    });
+  }
+};
+
 export const getAllProduct = async(req,res)=>{
     try {
         const product = await Product.find({});
