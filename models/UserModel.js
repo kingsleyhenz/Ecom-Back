@@ -16,21 +16,21 @@ const userSchema = new mongoose.Schema({
         type: Date,
     },
     password:{
-        type: String,
+        type: String, 
     },
     address: {
         type: {
             country: {
                 type: String,
-                required: true
+                required: false 
             },
             city: {
                 type: String,
-                required: true
+                required: false
             },
             state: {
                 type: String,
-                required: true
+                required: false
             }
         },
     },

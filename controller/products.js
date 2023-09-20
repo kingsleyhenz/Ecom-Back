@@ -18,7 +18,7 @@ export const createProduct = async(req,res) =>{
             price,
             specs,
             description,
-            imageUrl,
+            imageUrl, 
             quantity
         })
         res.json({

@@ -53,8 +53,8 @@ export const addToCart = async (req, res) => {
     console.log(error);
     res.status(500).json({
       status: "error",
-      message: "Failed to add item to cart",
-    });
+      message: "Failed to add item to cart", 
+    }); 
   }
 };
 

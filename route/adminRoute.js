@@ -33,7 +33,7 @@ adminRoute.get("/user-items/:category",loggedIn, isSuper, getItemsByCategory);
 
 adminRoute.get("/user-items/:subcategory",loggedIn, isSuper, getItemsBySubcategory);
 
-adminRoute.get("/user-items/:model",loggedIn, isSuper, getItemsByName);
+adminRoute.get("/user-items/:model",loggedIn, isSuper, getItemsByName); 
 
 adminRoute.put("/makeAdmin/:userId", loggedIn, isSuper, makeAdmin);
 
