@@ -12,7 +12,7 @@ cartRouter.get("/mycart", loggedIn, isBlocked, getCart);
 
 cartRouter.get("/totalPrice", loggedIn, isBlocked, getTotalAmount);
 
-cartRouter.delete("/remove/:productId", loggedIn, isBlocked, removeItem);
+cartRouter.delete("/remove/:cartItemId", loggedIn, isBlocked, removeItem);
 
 cartRouter.delete("/clear-cart", loggedIn, isBlocked, clearCart);
 

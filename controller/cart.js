@@ -66,8 +66,17 @@ export const getCart = async (req, res) => {
       message: "User not logged in",
     });
   }
+
   try {
-    const user = await UserMod.findById(req.userAuth).populate("cart");
+    const user = await UserMod.findById(req.userAuth).populate({
+      path: "cart",
+      populate: {
+        path: "product", 
+        model: "Product", 
+        // select: "-quantity",
+      },
+    });
+
     if (!user) {
       return res.status(404).json({
         status: "error",
@@ -76,7 +85,7 @@ export const getCart = async (req, res) => {
     }
     res.json({
       status: "success",
-      data: user.cart,
+      data: user.cart, 
     });
   } catch (error) {
     console.log(error);
@@ -85,7 +94,8 @@ export const getCart = async (req, res) => {
       message: "Failed to retrieve cart items",
     });
   }
-}
+};
+
 
 export const getTotalAmount = async (req, res) => {
   if (!req.userAuth) {
@@ -126,7 +136,7 @@ export const getTotalAmount = async (req, res) => {
 
 
 export const removeItem = async (req, res) => {
-  const { productId } = req.params;
+  const { cartItemId } = req.params;
   try {
     const user = await UserMod.findById(req.userAuth);
     if (!user) {
@@ -136,7 +146,7 @@ export const removeItem = async (req, res) => {
       });
     }
 
-    const item = user.cart.find((item) => item.product && item.product.toString() === productId);
+    const item = user.cart.find((item) => item._id.toString() === cartItemId);
     if (!item) {
       return res.status(404).json({
         status: "error",
