@@ -6,9 +6,9 @@ import userRoute from './route/userRoute.js';
 import cartRouter from './route/cartRoute.js';
 import itemRoute from './route/productRoute.js';
 import adminRoute from './route/adminRoute.js';
-import {
-  handleStripeWebhook,
-  handlePaystackWebhook,} from './controller/payment.js';
+// import {
+//   handleStripeWebhook,
+//   handlePaystackWebhook,} from './controller/payment.js';
  
 
 dotenv.config();
@@ -49,8 +49,8 @@ app.use("/api/v1/products", itemRoute);
 app.use("/api/v1/admin", adminRoute); 
 
 // // Webhook endpoints
-app.post('/webhooks/stripe', handleStripeWebhook);
-app.post('/webhooks/paystack', handlePaystackWebhook);
+// app.post('/webhooks/stripe', handleStripeWebhook);
+// app.post('/webhooks/paystack', handlePaystackWebhook);
 
 const PORT = process.env.PORT || 2000;
 app.listen(PORT, console.log(`Server is running on Port ${PORT}`));
