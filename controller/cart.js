@@ -5,7 +5,7 @@ export const addToCart = async (req, res) => {
   const { productId, quantity } = req.body;
   try {
     const product = await Product.findById(productId);
-    if (!product) {
+    if (!product || product.quantity < 1) {
       return res.status(404).json({
         status: "error",
         message: "Product not found",
