@@ -1,6 +1,16 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const paymentSchema = new mongoose.Schema({
+export interface IPayment extends Document {
+  user: mongoose.Types.ObjectId;
+  order: mongoose.Types.ObjectId;
+  paymentMethod: string;
+  paymentReference: string;
+  amount: number;
+  status: "Success" | "Failed" | "Pending";
+  createdAt: Date;
+}
+
+const paymentSchema: Schema<IPayment> = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -17,7 +27,6 @@ const paymentSchema = new mongoose.Schema({
   },
   paymentReference: {
     type: String,
-    // required: true,
   },
   amount: {
     type: Number,
@@ -34,6 +43,6 @@ const paymentSchema = new mongoose.Schema({
   },
 });
 
-const Payment = mongoose.model('Payment', paymentSchema);
+const Payment: Model<IPayment> = mongoose.model<IPayment>('Payment', paymentSchema);
 
 export default Payment;

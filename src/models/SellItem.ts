@@ -1,6 +1,24 @@
-import mongoose from "mongoose"; 
+import mongoose, { Schema, Document, Model } from "mongoose"; 
 
-const sellSchema = new mongoose.Schema({
+export interface ISellItem extends Document {
+  user: mongoose.Types.ObjectId;
+  category: string;
+  SubCategory: string;
+  Model: string;
+  specs: string[];
+  price: number;
+  description: string;
+  imageUrl: string;
+  quantity: number;
+  userDetails: {
+    email: string;
+    phoneNumber: string;
+    address: string;
+  };
+  createdAt: Date;
+}
+
+const sellSchema: Schema<ISellItem> = new mongoose.Schema({
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -55,12 +73,9 @@ const sellSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: function() {
-          return this._createdAt.toLocaleDateString('en-US');
-        }
-      }
-}) 
+    }
+});
 
-const sellItem = mongoose.model("sellItem", sellSchema);
+const SellItem: Model<ISellItem> = mongoose.model<ISellItem>("sellItem", sellSchema);
 
-export default sellItem
+export default SellItem;
